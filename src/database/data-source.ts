@@ -2,7 +2,6 @@ import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
 import { join } from 'node:path';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { Product } from '../products/entities/product.entity';
 
 config();
 
@@ -21,6 +20,6 @@ export const dataSource = new DataSource({
   database: process.env.DB_DATABASE,
   synchronize: process.env.ENVIRONMENT === 'development',
   logging: false,
-  entities: [Product],
+  entities: [__dirname + '/../**/*.entity.{js,ts}'],
   migrations: [migrationsPath],
 });
