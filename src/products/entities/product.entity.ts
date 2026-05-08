@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Category } from '../../categories/entities/category.entity';
 
 @Entity('products')
 export class Product {
@@ -31,8 +33,8 @@ export class Product {
   @Column()
   sku!: string;
 
-  @Column({ nullable: true })
-  category?: string;
+  @ManyToOne(() => Category, (category) => category.products as Product[])
+  category?: Category;
 
   @Column({ nullable: true })
   imageUrl?: string;
