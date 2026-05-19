@@ -1,36 +1,24 @@
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { Product } from '../../products/entities/product.entity';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('categories')
 export class Category {
-  @PrimaryGeneratedColumn()
-  id!: number;
+    @PrimaryGeneratedColumn()
+    id!: number;
 
-  @OneToMany(() => Product, (product) => product.category, { nullable: true })
-  products?: Product[];
+    @Column({
+        unique: true,
+    })
+    name!: string;
 
-  @Column({
-    unique: true,
-  })
-  name!: string;
+    @Column({ default: true })
+    isActive!: boolean;
 
-  @Column({ default: true })
-  isActive!: boolean;
+    @CreateDateColumn()
+    createdAt!: Date;
 
-  @CreateDateColumn()
-  createdAt!: Date;
+    @UpdateDateColumn()
+    updatedAt!: Date;
 
-  @UpdateDateColumn()
-  updatedAt!: Date;
-
-  @DeleteDateColumn()
-  deletedAt?: Date;
+    @DeleteDateColumn()
+    deletedAt?: Date;
 }
