@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { CategoryType } from '../enums/category-type.enum';
 
 @Entity('categories')
 export class Category {
@@ -21,4 +22,10 @@ export class Category {
 
     @DeleteDateColumn()
     deletedAt?: Date;
+
+    @Column({
+        type: 'enum',
+        enum: CategoryType,
+    })
+    type!: CategoryType;
 }
