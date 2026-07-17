@@ -25,8 +25,6 @@ export class CategoriesService {
             return Boolean(type) && Object.values(CategoryType).includes(type);
         });
 
-        console.log(categoryTypes);
-
         return this.categoriesRepository.find({
             ...(Boolean(categoryTypes.length) && {
                 where: {
