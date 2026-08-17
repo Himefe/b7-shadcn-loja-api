@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
+import { HttpQueryFilter } from '../types/query';
 
 @Injectable()
 export class ProductsService {
@@ -17,12 +18,21 @@ export class ProductsService {
         return this.productsRepository.save(product);
     }
 
-    findAll() {
-        return new Promise((resolve) =>
-            setTimeout(() => {
-                resolve(this.productsRepository.find());
-            }, 10000),
-        );
+    findAll(queryFilter?: HttpQueryFilter['filter']) {
+        const categories = Array.isArray(queryFilter?.categories) ? queryFilter.categories : [queryFilter?.categories];
+
+        return this.productsRepository.find({
+            where: {
+                ...(Object.hasOwn(queryFilter || {}, 'isActive') && {
+                    isActive: Boolean(queryFilter?.isActive),
+                }),
+                ...(Boolean(categories.length) && {
+                    category: {
+                        id: In(categories),
+                    },
+                }),
+            },
+        });
     }
 
     findOne(id: number) {
@@ -35,13 +45,5 @@ export class ProductsService {
 
     remove(id: number) {
         return this.productsRepository.softDelete(id);
-    }
-
-    getProductsByCategory(categoryId: number) {
-        return new Promise((resolve) => {
-            return setTimeout(() => {
-                resolve(this.productsRepository.findBy({ category: { id: categoryId }, isActive: true }));
-            }, 4000);
-        });
     }
 }

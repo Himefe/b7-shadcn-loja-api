@@ -24,8 +24,8 @@ export class Category {
     deletedAt?: Date;
 
     @Column({
-        type: 'enum',
-        enum: CategoryType,
+        type: 'varchar',
+        length: 50,
     })
     type!: CategoryType;
 }
