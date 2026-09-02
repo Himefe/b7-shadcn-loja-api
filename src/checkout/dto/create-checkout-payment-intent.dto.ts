@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsArray, IsInt, IsString, Min, ValidateNested } from 'class-validator';
+import { ArrayMinSize, IsArray, IsInt, IsObject, IsString, Min, ValidateNested } from 'class-validator';
 
 import { Type } from 'class-transformer';
 
@@ -11,13 +11,18 @@ export class CheckoutItemDto {
     quantity!: number;
 }
 
-export class CreateCheckoutSessionDto {
+export class CreateCheckoutPaymentIntentDto {
     @IsArray()
     @ArrayMinSize(1)
     @ValidateNested({ each: true })
     @Type(() => CheckoutItemDto)
     products!: CheckoutItemDto[];
 
-    @IsString()
-    userName!: string;
+    @IsObject()
+    @ValidateNested({ each: true })
+    @Type(() => Object)
+    user!: {
+        name: string;
+        email: string;
+    };
 }
